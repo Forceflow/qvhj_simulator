@@ -10,7 +10,5 @@ public class Main {
 		Team t = new Team(a,b);
 		t.playQuestion(2);
 		t.playQuestion(5);
-
 	}
-
 }
