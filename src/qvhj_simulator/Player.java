@@ -1,7 +1,7 @@
 package qvhj_simulator;
 import java.util.Random;
 
-public class Player {
+public class Player implements Comparable<Player>{
 	public int points = 0; // current player score
 	public int smartness = 50; // smartness, out of 100
 	public String name = "Player";
@@ -24,5 +24,19 @@ public class Player {
 	
 	public void addPoints(int points){
 		this.points += points;
+	}
+	
+	public int getPoints(){
+		return this.points;
+	}
+
+	@Override
+	public int compareTo(Player o) {
+		if(o.points > this.points){
+			return -1;
+		} else if (o.points < this.points) {
+			return 1;
+		}
+		return 0;
 	}
 }
