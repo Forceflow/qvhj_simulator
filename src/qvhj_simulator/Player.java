@@ -12,12 +12,13 @@ public class Player implements Comparable<Player>{
 		this.name = name;
 	}
 	
-	public boolean playQuestion(int points){
+	public boolean playQuestion(int points, int damage){
 		// try to answer question - fail if smartness not large enough
 		if(random_generator.nextInt(100) < this.smartness){
 			this.addPoints(points);
 			return true;
 		}
+		this.addPoints(-damage);
 		return false;
 		
 	}

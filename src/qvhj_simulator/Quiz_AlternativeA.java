@@ -6,30 +6,31 @@ import java.util.Random;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
-public class Quiz_Basic {
+public class Quiz_AlternativeA {
 	public Player p0;
 	public Player p1;
 	public Player p2;
 	public Player p3;
-	
+
 	private Team t0;
 	private Team t1;
-	
+
 	private Random random_generator = new Random();
 	//private final static Logger LOGGER = Logger.getLogger(Quiz.class.getName());
-	
-	public Quiz_Basic(Player p0, Player p1, Player p2, Player p3){
+
+	public Quiz_AlternativeA(Player p0, Player p1, Player p2, Player p3){
 		this.p0 = p0;
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;
 	}
-	
+
 	/**
 	 * Play a full quiz
 	 */
 	public void play(){
 		playRoundOne();
+		//printCSV();
 		generateTeams();
 		playRoundTwo();
 		generateTeams();
@@ -37,30 +38,35 @@ public class Quiz_Basic {
 		generateTeams();
 		playRoundFour();
 	}
-	
+
 	/**
 	 * ROUND 1
 	 * No teams are formed. Every player gets introduced, and the other players get a question about each player.
 	 */
 	private void playRoundOne(){
+		// SET ALL PLAYERS POINTS TO 10
+		this.p0.points = 10;
+		this.p1.points = 10;
+		this.p2.points = 10;
+		this.p3.points = 10;
 		// questions about p0
-		this.p1.playQuestion(1,0);
-		this.p2.playQuestion(1,0);
-		this.p3.playQuestion(1,0);
+		this.p1.playQuestion(1,1);
+		this.p2.playQuestion(1,1);
+		this.p3.playQuestion(1,1);
 		// questions about p1
-		this.p2.playQuestion(1,0);
-		this.p3.playQuestion(1,0);
-		this.p0.playQuestion(1,0);
+		this.p2.playQuestion(1,1);
+		this.p3.playQuestion(1,1);
+		this.p0.playQuestion(1,1);
 		// questions about p2
-		this.p3.playQuestion(1,0);
-		this.p0.playQuestion(1,0);
-		this.p1.playQuestion(1,0);
+		this.p3.playQuestion(1,1);
+		this.p0.playQuestion(1,1);
+		this.p1.playQuestion(1,1);
 		// questions about p3
-		this.p0.playQuestion(1,0);
-		this.p1.playQuestion(1,0);
-		this.p2.playQuestion(1,0);
+		this.p0.playQuestion(1,1);
+		this.p1.playQuestion(1,1);
+		this.p2.playQuestion(1,1);
 	}
-	
+
 	/**
 	 * ROUND 2
 	 * 6 sets of 2 questions are asked, 1 or 2 points per question respectively. When question fails, it goes to other team.
@@ -71,26 +77,31 @@ public class Quiz_Basic {
 		playRoundTwoQuestionSet(t1, t0);
 		playRoundTwoQuestionSet(t0, t1);
 	}
-	
+
 	/** ROUND 3
 	 * Each team can win 10 points by guessing paper headlines - if they don't get anything, other team gets a try
 	 * 
 	 * In this model, each team gets 5 guesses correct every time, the rest is random
 	 */
 	private void playRoundThree(){
+		
 		// T1 guessround
 		int guess = random_generator.nextInt(5);
-		int guess_rest = random_generator.nextInt(5-guess);
-		t1.addPoints(5+guess);
-		t0.addPoints(guess_rest);
-		
+		t1.addPoints(guess);
+
 		// T0 guessround
 		guess = random_generator.nextInt(5);
-		guess_rest = random_generator.nextInt(5-guess);
-		t0.addPoints(5+guess);
-		t1.addPoints(guess_rest);
+		t0.addPoints(guess);
+		
+		// T1 guessround
+		guess = random_generator.nextInt(5);
+		t1.addPoints(guess);
+
+		// T0 guessround
+		guess = random_generator.nextInt(5);
+		t0.addPoints(guess);
 	}
-	
+
 	/**
 	 * ROUND 4
 	 * Teams can "bag" a topics, from 0 to 5 items.
@@ -104,7 +115,7 @@ public class Quiz_Basic {
 		// How many topics bagged?
 		int t0_bag = 3 + random_generator.nextInt(3);
 		int t1_bag = 3 + random_generator.nextInt(3);
-		
+
 		// play five question rounds for incrementing point value
 		for(int i = 1; i<=5; i++){		
 			// Team 1
@@ -121,7 +132,7 @@ public class Quiz_Basic {
 			}
 		}
 	}
-	
+
 	/**
 	 * Play a question set of round 2 (one question for 1 point, one question for 2 points) - if team A answers wrong, question goes to other team
 	 */
@@ -130,11 +141,11 @@ public class Quiz_Basic {
 		if(! A.playQuestion(1)){ // if they fail
 			B.playQuestion(1); // Team B gets a try
 		}
-		if(! A.playQuestion(2)){
-			B.playQuestion(2);
+		if(! A.playQuestion(3)){
+			B.playQuestion(3);
 		}
 	}
-	
+
 	/**
 	 * Generate teams - t1 will always contain the team with the player with the lowest score
 	 */
@@ -142,10 +153,10 @@ public class Quiz_Basic {
 		// get list of players sorted by score
 		ArrayList<Player> sorted_players = this.getSortedPlayers();
 		Player lastplayer = sorted_players.get(3); // get player in last place
-		
+
 		// last player randomly picks partner
 		int partner = random_generator.nextInt(3);
-		
+
 		if(partner == 0){ 
 			// last player teams up with player in first place
 			this.t1 = new Team(lastplayer, sorted_players.get(0));
@@ -160,7 +171,7 @@ public class Quiz_Basic {
 			this.t0 = new Team(sorted_players.get(0), sorted_players.get(1));
 		}
 	}
-	
+
 	/**
 	 * Get a list of players, sorted by points in decreasing order
 	 */
@@ -173,11 +184,11 @@ public class Quiz_Basic {
 		Collections.sort(sorted_players, Collections.reverseOrder());
 		return sorted_players;
 	}
-	
+
 	public void printScores(){
 		System.out.println(p0.getPoints() + " " + p1.getPoints() + " " + p2.getPoints() + " " + p3.getPoints());
 	}
-	
+
 	public void printCSV(){
 		ArrayList<Player> players = getSortedPlayers();
 		String csv = "";
