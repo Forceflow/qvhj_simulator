@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Main {
 
-	public static final int HOW_MANY_SIMS = 10;
+	public static final int HOW_MANY_SIMS = 100000;
 	public static void main(String[] args) {
 
 		// statistics
@@ -19,13 +19,15 @@ public class Main {
 			
 			// create players
 			Player a = new Player("TomWaes");
+			a.smartness= 10;
 			Player b = new Player("Daniel");
+			b.smartness = 10;
 			Player c = new Player("Phara");
 			Player d = new Player("Linde");
 			
 			// Play quiz
-			//Quiz_AlternativeB q = new Quiz_AlternativeB(a, b, c, d);
-			Quiz_AlternativeA q = new Quiz_AlternativeA(a, b, c, d);
+			Quiz_AlternativeB q = new Quiz_AlternativeB(a, b, c, d);
+			//Quiz_AlternativeA q = new Quiz_AlternativeA(a, b, c, d);
 			//Quiz_Basic q = new Quiz_Basic(a, b, c, d);
 			q.play();
 			//q.printCSV();

@@ -30,13 +30,14 @@ public class Quiz_AlternativeB {
 	 */
 	public void play(){
 		playRoundOne();
-		printCSV();
+		//printCSV();
 		generateTeams();
 		playRoundTwo();
-		generateTeamsNotFirstRound();
+		generateTeams();
 		playRoundThree();
-		generateTeamsNotFirstRound();
+		generateTeams();
 		playRoundFour();
+		//printCSV();
 	}
 
 	/**
@@ -45,26 +46,26 @@ public class Quiz_AlternativeB {
 	 */
 	private void playRoundOne(){
 		// SET ALL PLAYERS POINTS TO 10
-		this.p0.points = 10;
-		this.p1.points = 10;
-		this.p2.points = 10;
-		this.p3.points = 10;
+		this.p0.points = 100;
+		this.p1.points = 100;
+		this.p2.points = 100;
+		this.p3.points = 100;
 		// questions about p0
-		this.p1.playQuestion(1,1);
-		this.p2.playQuestion(1,1);
-		this.p3.playQuestion(1,1);
+		this.p1.playQuestion(25,25);
+		this.p2.playQuestion(25,25);
+		this.p3.playQuestion(25,25);
 		// questions about p1
-		this.p2.playQuestion(1,1);
-		this.p3.playQuestion(1,1);
-		this.p0.playQuestion(1,1);
+		this.p2.playQuestion(25,25);
+		this.p3.playQuestion(25,25);
+		this.p0.playQuestion(25,25);
 		// questions about p2
-		this.p3.playQuestion(1,1);
-		this.p0.playQuestion(1,1);
-		this.p1.playQuestion(1,1);
+		this.p3.playQuestion(25,25);
+		this.p0.playQuestion(25,25);
+		this.p1.playQuestion(25,25);
 		// questions about p3
-		this.p0.playQuestion(1,1);
-		this.p1.playQuestion(1,1);
-		this.p2.playQuestion(1,1);
+		this.p0.playQuestion(25,25);
+		this.p1.playQuestion(25,25);
+		this.p2.playQuestion(25,25);
 	}
 
 	/**
@@ -88,26 +89,26 @@ public class Quiz_AlternativeB {
 		// T1 guessround
 		int guess = random_generator.nextInt(5);
 		int guess_rest = random_generator.nextInt(5-guess);
-		t1.addPoints(guess);
-		t0.addPoints(guess_rest);
+		t1.addPoints(guess*20);
+		t0.addPoints(guess_rest*20);
 
 		// T0 guessround
 		guess = random_generator.nextInt(5);
 		guess_rest = random_generator.nextInt(5-guess);
-		t0.addPoints(guess);
-		t1.addPoints(guess_rest);
+		t0.addPoints(guess*20);
+		t1.addPoints(guess_rest*20);
 		
 		// T1 guessround
 		guess = random_generator.nextInt(5);
 		guess_rest = random_generator.nextInt(5-guess);
-		t1.addPoints(guess);
-		t0.addPoints(guess_rest);
+		t1.addPoints(guess*20);
+		t0.addPoints(guess_rest*20);
 
 		// T0 guessround
 		guess = random_generator.nextInt(5);
 		guess_rest = random_generator.nextInt(5-guess);
-		t0.addPoints(guess);
-		t1.addPoints(guess_rest);
+		t0.addPoints(guess*20);
+		t1.addPoints(guess_rest*20);
 	}
 
 	/**
@@ -128,14 +129,14 @@ public class Quiz_AlternativeB {
 		for(int i = 1; i<=5; i++){		
 			// Team 1
 			if(t1_bag >= i) {// if t1 has enough questions in the bag
-				if(! t1.playQuestion(i, i*5)){ // ask t1 a question
-					t0.playQuestion(i, i*5); // if fail, ask t0 a question
+				if(! t1.playQuestion(i*10, i*5)){ // ask t1 a question
+					t0.playQuestion(i*10, i*5); // if fail, ask t0 a question
 				}
 			}
 			// Team 0
 			if(t0_bag >= i) {// if t1 has enough questions in the bag
-				if(! t0.playQuestion(i, i*5)){ // ask t1 a question
-					t1.playQuestion(i, i*5); // if fail, ask t0 a question
+				if(! t0.playQuestion(i*10, i*5)){ // ask t1 a question
+					t1.playQuestion(i*10, i*5); // if fail, ask t0 a question
 				}
 			}
 		}
@@ -146,11 +147,11 @@ public class Quiz_AlternativeB {
 	 */
 	private void playRoundTwoQuestionSet(Team A, Team B){
 		// Team A plays a question set
-		if(! A.playQuestion(1)){ // if they fail
-			B.playQuestion(1); // Team B gets a try
+		if(! A.playQuestion(25)){ // if they fail
+			B.playQuestion(25); // Team B gets a try
 		}
-		if(! A.playQuestion(3)){
-			B.playQuestion(3);
+		if(! A.playQuestion(50)){
+			B.playQuestion(50);
 		}
 	}
 
