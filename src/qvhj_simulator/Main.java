@@ -64,6 +64,8 @@ public class Main {
 		double vco_3 = std_3 / avg_3;
 		
 		// PRINT STATISTICS
+		System.out.println("Ran " + HOW_MANY_SIMS + " simulations.");
+		System.out.println("");
 		System.out.println("Averages: " + avg_0 + " | " + avg_1 + " | " + avg_2 + " | " + avg_3);
 		System.out.println("Std. Dev: " + std_0 + " | " + std_1 + " | " + std_2 + " | " + std_3);
 		System.out.println("Var. Coe: " + vco_0 + " | " + vco_1 + " | " + vco_2 + " | " + vco_3);

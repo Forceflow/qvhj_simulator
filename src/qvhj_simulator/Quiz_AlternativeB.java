@@ -30,14 +30,12 @@ public class Quiz_AlternativeB {
 	 */
 	public void play(){
 		playRoundOne();
-		//printCSV();
 		generateTeams();
 		playRoundTwo();
 		generateTeams();
 		playRoundThree();
 		generateTeams();
 		playRoundFour();
-		//printCSV();
 	}
 
 	/**
