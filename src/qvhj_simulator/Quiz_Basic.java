@@ -30,19 +30,12 @@ public class Quiz_Basic {
 	 */
 	public void play(){
 		playRoundOne();
-		//printScores();
-		
 		generateTeams();
 		playRoundTwo();
-		//printScores();
-		
 		generateTeams();
 		playRoundThree();
-		//printScores();
-		
 		generateTeams();
 		playRoundFour();
-		//printScores();
 	}
 	
 	/**

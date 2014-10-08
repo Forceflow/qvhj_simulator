@@ -9,6 +9,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		// statistics
+		ArrayList<ArrayList<Player>> winning_players = new ArrayList<ArrayList<Player>>();
 		ArrayList<Integer> scores_0 = new ArrayList<Integer>();
 		ArrayList<Integer> scores_1 = new ArrayList<Integer>();
 		ArrayList<Integer> scores_2 = new ArrayList<Integer>();
@@ -29,12 +30,14 @@ public class Main {
 
 			// collect quiz results
 			ArrayList<Player> sorted_players = q.getSortedPlayers();
+			winning_players.add(sorted_players);
 			scores_0.add(sorted_players.get(0).points);
 			scores_1.add(sorted_players.get(1).points);
 			scores_2.add(sorted_players.get(2).points);
 			scores_3.add(sorted_players.get(3).points);
 		}
 		
+		// CALCULATE TEST SET STATISTICS
 		double avg_0 = Statistics.average(scores_0);
 		double avg_1 = Statistics.average(scores_1);
 		double avg_2 = Statistics.average(scores_2);
@@ -51,9 +54,15 @@ public class Main {
 		int max_1 = Collections.max(scores_1);
 		int max_2 = Collections.max(scores_2);
 		int max_3 = Collections.max(scores_3);
+		double vco_0 = std_0 / avg_0;
+		double vco_1 = std_1 / avg_1;
+		double vco_2 = std_2 / avg_2;
+		double vco_3 = std_3 / avg_3;
 		
+		// PRINT STATISTICS
 		System.out.println("Averages: " + avg_0 + " | " + avg_1 + " | " + avg_2 + " | " + avg_3);
 		System.out.println("Std. Dev: " + std_0 + " | " + std_1 + " | " + std_2 + " | " + std_3);
+		System.out.println("Var. Coe: " + vco_0 + " | " + vco_1 + " | " + vco_2 + " | " + vco_3);
 		System.out.println("Minimum : " + min_0 + " | " + min_1 + " | " + min_2 + " | " + min_3);
 		System.out.println("Maximum : " + max_0 + " | " + max_1 + " | " + max_2 + " | " + max_3);
 	}
