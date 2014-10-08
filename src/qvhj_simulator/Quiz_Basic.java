@@ -6,7 +6,7 @@ import java.util.Random;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
-public class Quiz {
+public class Quiz_Basic {
 	public Player p0;
 	public Player p1;
 	public Player p2;
@@ -17,9 +17,8 @@ public class Quiz {
 	
 	private Random random_generator = new Random();
 	//private final static Logger LOGGER = Logger.getLogger(Quiz.class.getName());
-
 	
-	public Quiz(Player p0, Player p1, Player p2, Player p3){
+	public Quiz_Basic(Player p0, Player p1, Player p2, Player p3){
 		this.p0 = p0;
 		this.p1 = p1;
 		this.p2 = p2;
@@ -175,13 +174,13 @@ public class Quiz {
 	 * Get a list of players, sorted by points in decreasing order
 	 */
 	public ArrayList<Player> getSortedPlayers(){
-		ArrayList<Player> scores = new ArrayList<Player>();
-		scores.add(p0);
-		scores.add(p1);
-		scores.add(p2);
-		scores.add(p3);
-		Collections.sort(scores, Collections.reverseOrder());
-		return scores;
+		ArrayList<Player> sorted_players = new ArrayList<Player>();
+		sorted_players.add(p0);
+		sorted_players.add(p1);
+		sorted_players.add(p2);
+		sorted_players.add(p3);
+		Collections.sort(sorted_players, Collections.reverseOrder());
+		return sorted_players;
 	}
 	
 	public void printScores(){
