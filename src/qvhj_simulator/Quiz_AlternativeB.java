@@ -7,6 +7,22 @@ import java.util.Random;
 //import java.util.logging.Logger;
 
 public class Quiz_AlternativeB {
+	
+	// CONFIGURE ROUNDS AND MODEL ASSUMPTIONS HERE
+	// Round 1
+	public static final int R1_POINTS_START = 100; // start points for every player
+	public static final int R1_POINTS = 50; // reward for getting question right
+	public static final int R1_POINTS_FAULT = 20; // penalty for getting question wrong
+	// Round 2
+	public static final int R2_POINTS_FIRST = 20; // reward for getting first question right
+	public static final int R2_POINTS_SECOND = 50; // reward for getting second question right
+	// Round 3
+	public static final int R3_N_WORDS = 5; // how many words per headline to guess
+	public static final int R3_POINTS = 20;
+	// ROUND 4
+	public static final int R4_ASSUME_BAGGED = 3; // how many items do we assume players definitely will get
+	public static final int R4_POINTS_STEP = 20; // steps for points in round 4
+	
 	public Player p0;
 	public Player p1;
 	public Player p2;
@@ -43,32 +59,32 @@ public class Quiz_AlternativeB {
 	 * No teams are formed. Every player gets introduced, and the other players get a question about each player.
 	 */
 	private void playRoundOne(){
-		// SET ALL PLAYERS POINTS TO 10
-		this.p0.points = 100;
-		this.p1.points = 100;
-		this.p2.points = 100;
-		this.p3.points = 100;
+		// SET ALL PLAYERS POINTS TO R1_POINTS_START
+		this.p0.points = R1_POINTS_START;
+		this.p1.points = R1_POINTS_START;
+		this.p2.points = R1_POINTS_START;
+		this.p3.points = R1_POINTS_START;
 		// questions about p0
-		this.p1.playQuestion(25,25);
-		this.p2.playQuestion(25,25);
-		this.p3.playQuestion(25,25);
+		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p2.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		// questions about p1
-		this.p2.playQuestion(25,25);
-		this.p3.playQuestion(25,25);
-		this.p0.playQuestion(25,25);
+		this.p2.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		// questions about p2
-		this.p3.playQuestion(25,25);
-		this.p0.playQuestion(25,25);
-		this.p1.playQuestion(25,25);
+		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		// questions about p3
-		this.p0.playQuestion(25,25);
-		this.p1.playQuestion(25,25);
-		this.p2.playQuestion(25,25);
+		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		this.p2.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 	}
 
 	/**
 	 * ROUND 2
-	 * 6 sets of 2 questions are asked, 1 or 2 points per question respectively. When question fails, it goes to other team.
+	 * 4 sets of 2 questions are asked, 1 or 2 points per question respectively. When question fails, it goes to other team.
 	 */
 	private void playRoundTwo(){
 		playRoundTwoQuestionSet(t1, t0);
@@ -83,30 +99,29 @@ public class Quiz_AlternativeB {
 	 * In this model, each team gets 5 guesses correct every time, the rest is random
 	 */
 	private void playRoundThree(){
-		
 		// T1 guessround
-		int guess = random_generator.nextInt(5);
-		int guess_rest = random_generator.nextInt(5-guess);
-		t1.addPoints(guess*20);
-		t0.addPoints(guess_rest*20);
+		int guess = random_generator.nextInt(R3_N_WORDS);
+		int guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
+		t1.addPoints(guess*R3_POINTS);
+		t0.addPoints(guess_rest*R3_POINTS);
 
 		// T0 guessround
-		guess = random_generator.nextInt(5);
-		guess_rest = random_generator.nextInt(5-guess);
-		t0.addPoints(guess*20);
-		t1.addPoints(guess_rest*20);
+		guess = random_generator.nextInt(R3_N_WORDS);
+		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
+		t0.addPoints(guess*R3_POINTS);
+		t1.addPoints(guess_rest*R3_POINTS);
 		
 		// T1 guessround
-		guess = random_generator.nextInt(5);
-		guess_rest = random_generator.nextInt(5-guess);
-		t1.addPoints(guess*20);
-		t0.addPoints(guess_rest*20);
+		guess = random_generator.nextInt(R3_N_WORDS);
+		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
+		t1.addPoints(guess*R3_POINTS);
+		t0.addPoints(guess_rest*R3_POINTS);
 
 		// T0 guessround
-		guess = random_generator.nextInt(5);
-		guess_rest = random_generator.nextInt(5-guess);
-		t0.addPoints(guess*20);
-		t1.addPoints(guess_rest*20);
+		guess = random_generator.nextInt(R3_N_WORDS);
+		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
+		t0.addPoints(guess*R3_POINTS);
+		t1.addPoints(guess_rest*R3_POINTS);
 	}
 
 	/**
@@ -145,11 +160,11 @@ public class Quiz_AlternativeB {
 	 */
 	private void playRoundTwoQuestionSet(Team A, Team B){
 		// Team A plays a question set
-		if(! A.playQuestion(25)){ // if they fail
-			B.playQuestion(25); // Team B gets a try
+		if(! A.playQuestion(R2_POINTS_FIRST)){ // if they fail
+			B.playQuestion(R2_POINTS_FIRST); // Team B gets a try
 		}
-		if(! A.playQuestion(50)){
-			B.playQuestion(50);
+		if(! A.playQuestion(R2_POINTS_SECOND)){
+			B.playQuestion(R2_POINTS_SECOND);
 		}
 	}
 
