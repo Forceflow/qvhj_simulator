@@ -19,9 +19,7 @@ public class Main {
 			
 			// create players
 			Player a = new Player("TomWaes");
-			a.smartness= 10;
 			Player b = new Player("Daniel");
-			b.smartness = 10;
 			Player c = new Player("Phara");
 			Player d = new Player("Linde");
 			

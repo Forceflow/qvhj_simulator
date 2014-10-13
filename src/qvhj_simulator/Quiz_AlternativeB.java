@@ -14,11 +14,12 @@ public class Quiz_AlternativeB {
 	public static final int R1_POINTS = 50; // reward for getting question right
 	public static final int R1_POINTS_FAULT = 20; // penalty for getting question wrong
 	// Round 2
+	public static final int R2_N_PER_TEAM = 2; // how many picture questions per team
 	public static final int R2_POINTS_FIRST = 20; // reward for getting first question right
 	public static final int R2_POINTS_SECOND = 50; // reward for getting second question right
 	// Round 3
 	public static final int R3_N_WORDS = 5; // how many words per headline to guess
-	public static final int R3_POINTS = 20;
+	public static final int R3_POINTS = 10; // how many points per headline
 	// ROUND 4
 	public static final int R4_ASSUME_BAGGED = 3; // how many items do we assume players definitely will get
 	public static final int R4_POINTS_STEP = 20; // steps for points in round 4
@@ -87,41 +88,28 @@ public class Quiz_AlternativeB {
 	 * 4 sets of 2 questions are asked, 1 or 2 points per question respectively. When question fails, it goes to other team.
 	 */
 	private void playRoundTwo(){
+		for(int i = 0; i<R2_N_PER_TEAM; i++){
 		playRoundTwoQuestionSet(t1, t0);
 		playRoundTwoQuestionSet(t0, t1);
-		playRoundTwoQuestionSet(t1, t0);
-		playRoundTwoQuestionSet(t0, t1);
+		}
 	}
 
 	/** ROUND 3
 	 * Each team can win 10 points by guessing paper headlines - if they don't get anything, other team gets a try
-	 * 
-	 * In this model, each team gets 5 guesses correct every time, the rest is random
 	 */
 	private void playRoundThree(){
 		// T1 guessround
 		int guess = random_generator.nextInt(R3_N_WORDS);
-		int guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
 		t1.addPoints(guess*R3_POINTS);
-		t0.addPoints(guess_rest*R3_POINTS);
-
 		// T0 guessround
 		guess = random_generator.nextInt(R3_N_WORDS);
-		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
 		t0.addPoints(guess*R3_POINTS);
-		t1.addPoints(guess_rest*R3_POINTS);
-		
 		// T1 guessround
 		guess = random_generator.nextInt(R3_N_WORDS);
-		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
 		t1.addPoints(guess*R3_POINTS);
-		t0.addPoints(guess_rest*R3_POINTS);
-
 		// T0 guessround
 		guess = random_generator.nextInt(R3_N_WORDS);
-		guess_rest = random_generator.nextInt(R3_N_WORDS-guess);
 		t0.addPoints(guess*R3_POINTS);
-		t1.addPoints(guess_rest*R3_POINTS);
 	}
 
 	/**
@@ -142,14 +130,14 @@ public class Quiz_AlternativeB {
 		for(int i = 1; i<=5; i++){		
 			// Team 1
 			if(t1_bag >= i) {// if t1 has enough questions in the bag
-				if(! t1.playQuestion(i*10, i*5)){ // ask t1 a question
-					t0.playQuestion(i*10, i*5); // if fail, ask t0 a question
+				if(! t1.playQuestion(i*R4_POINTS_STEP, i*5)){ // ask t1 a question
+					t0.playQuestion(i*R4_POINTS_STEP, i*5); // if fail, ask t0 a question
 				}
 			}
 			// Team 0
 			if(t0_bag >= i) {// if t1 has enough questions in the bag
-				if(! t0.playQuestion(i*10, i*5)){ // ask t1 a question
-					t1.playQuestion(i*10, i*5); // if fail, ask t0 a question
+				if(! t0.playQuestion(i*R4_POINTS_STEP, i*5)){ // ask t1 a question
+					t1.playQuestion(i*R4_POINTS_STEP, i*5); // if fail, ask t0 a question
 				}
 			}
 		}
@@ -262,6 +250,5 @@ public class Quiz_AlternativeB {
 		}
 		System.out.println(csv);
 	}
-
 }
 
