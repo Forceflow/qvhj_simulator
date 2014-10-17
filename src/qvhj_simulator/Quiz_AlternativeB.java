@@ -10,13 +10,13 @@ public class Quiz_AlternativeB {
 	
 	// CONFIGURE ROUNDS AND MODEL ASSUMPTIONS HERE
 	// Round 1
-	public static final int R1_POINTS_START = 100; // start points for every player
-	public static final int R1_POINTS = 50; // reward for getting question right
-	public static final int R1_POINTS_FAULT = 20; // penalty for getting question wrong
+	public static final int R1_POINTS_START = 50; // start points for every player
+	public static final int R1_POINTS = 20; // reward for getting question right
+	public static final int R1_POINTS_FAULT = 10; // penalty for getting question wrong
 	// Round 2
 	public static final int R2_N_PER_TEAM = 2; // how many picture questions per team
 	public static final int R2_POINTS_FIRST = 20; // reward for getting first question right
-	public static final int R2_POINTS_SECOND = 50; // reward for getting second question right
+	public static final int R2_POINTS_SECOND = 40; // reward for getting second question right
 	// Round 3
 	public static final int R3_N_WORDS = 5; // how many words per headline to guess
 	public static final int R3_POINTS = 10; // how many points per headline
@@ -31,9 +31,11 @@ public class Quiz_AlternativeB {
 
 	private Team t0;
 	private Team t1;
-
+	
+	public boolean[] exaequo_last = new boolean[4];
+	public boolean[] exaequo_first = new boolean[4];
+	
 	private Random random_generator = new Random();
-	//private final static Logger LOGGER = Logger.getLogger(Quiz.class.getName());
 
 	public Quiz_AlternativeB(Player p0, Player p1, Player p2, Player p3){
 		this.p0 = p0;
@@ -47,12 +49,25 @@ public class Quiz_AlternativeB {
 	 */
 	public void play(){
 		playRoundOne();
+		exaequo_first[0] = checkForExAequoFirst();
+		exaequo_last[0] = checkForExAequoLast();
 		generateTeams();
+		
+		
 		playRoundTwo();
+		exaequo_first[1] = checkForExAequoFirst();
+		exaequo_last[1] = checkForExAequoLast();
 		generateTeams();
+		
+		
 		playRoundThree();
+		exaequo_first[2] = checkForExAequoFirst();
+		exaequo_last[2] = checkForExAequoLast();
 		generateTeams();
+		
 		playRoundFour();
+		exaequo_first[3] = checkForExAequoFirst();
+		exaequo_last[3] = checkForExAequoLast();
 	}
 
 	/**
@@ -220,6 +235,22 @@ public class Quiz_AlternativeB {
 			t1 = new Team(lastplayer, otherteam.p1);
 			t0 = new Team(forbidden, otherteam.p0);
 		}
+	}
+	
+	private boolean checkForExAequoFirst(){
+		ArrayList<Player> players = getSortedPlayers();
+		if(players.get(0).points == players.get(1).points){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkForExAequoLast(){
+		ArrayList<Player> players = getSortedPlayers();
+		if(players.get(3).points == players.get(2).points){
+			return true;
+		}
+		return false;
 	}
 
 	/**

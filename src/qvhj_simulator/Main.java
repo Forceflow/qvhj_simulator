@@ -14,6 +14,8 @@ public class Main {
 		ArrayList<Integer> scores_1 = new ArrayList<Integer>();
 		ArrayList<Integer> scores_2 = new ArrayList<Integer>();
 		ArrayList<Integer> scores_3 = new ArrayList<Integer>();
+		int[] exaequos_first = new int[4];
+		int[] exaequos_last = new int[4];
 
 		for(int i = 0; i<HOW_MANY_SIMS; i++){
 			
@@ -37,6 +39,14 @@ public class Main {
 			scores_1.add(sorted_players.get(1).points);
 			scores_2.add(sorted_players.get(2).points);
 			scores_3.add(sorted_players.get(3).points);
+			if(q.exaequo_last[0]){exaequos_last[0]++;}
+			if(q.exaequo_first[0]){exaequos_first[0]++;}
+			if(q.exaequo_last[1]){exaequos_last[1]++;}
+			if(q.exaequo_first[1]){exaequos_first[1]++;}
+			if(q.exaequo_last[2]){exaequos_last[2]++;}
+			if(q.exaequo_first[2]){exaequos_first[2]++;}
+			if(q.exaequo_last[3]){exaequos_last[3]++;}
+			if(q.exaequo_first[3]){exaequos_first[3]++;}
 		}
 		
 		// CALCULATE TEST SET STATISTICS
@@ -60,6 +70,14 @@ public class Main {
 		double vco_1 = std_1 / avg_1;
 		double vco_2 = std_2 / avg_2;
 		double vco_3 = std_3 / avg_3;
+		double ex_0_last = (exaequos_last[0] / (double) HOW_MANY_SIMS) * 100;
+		double ex_1_last = (exaequos_last[1] / (double) HOW_MANY_SIMS) * 100;
+		double ex_2_last = (exaequos_last[2] / (double) HOW_MANY_SIMS) * 100;
+		double ex_3_last = (exaequos_last[3] / (double) HOW_MANY_SIMS) * 100;
+		double ex_0_first = (exaequos_first[0] / (double) HOW_MANY_SIMS) * 100;
+		double ex_1_first = (exaequos_first[1] / (double) HOW_MANY_SIMS) * 100;
+		double ex_2_first = (exaequos_first[2] / (double) HOW_MANY_SIMS) * 100;
+		double ex_3_first = (exaequos_first[3] / (double) HOW_MANY_SIMS) * 100;
 		
 		// PRINT STATISTICS
 		System.out.println("Ran " + HOW_MANY_SIMS + " simulations.");
@@ -69,5 +87,7 @@ public class Main {
 		System.out.println("Var. Coe: " + vco_0 + " | " + vco_1 + " | " + vco_2 + " | " + vco_3);
 		System.out.println("Minimum : " + min_0 + " | " + min_1 + " | " + min_2 + " | " + min_3);
 		System.out.println("Maximum : " + max_0 + " | " + max_1 + " | " + max_2 + " | " + max_3);
+		System.out.println("Number of ex aequos last place: " + ex_0_last + " | " + ex_1_last + " | " + ex_2_last + " | " + ex_3_last);
+		System.out.println("Number of ex aequos first place: " + ex_0_first + " | " + ex_1_first + " | " + ex_2_first + " | " + ex_3_first);
 	}
 }
