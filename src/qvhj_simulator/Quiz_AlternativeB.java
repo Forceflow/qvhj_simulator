@@ -18,6 +18,7 @@ public class Quiz_AlternativeB {
 	public static final int R2_POINTS_FIRST = 20; // reward for getting first question right
 	public static final int R2_POINTS_SECOND = 40; // reward for getting second question right
 	// Round 3
+	public static final int R3_N_PER_TEAM = 2; // how many headlines per team
 	public static final int R3_N_WORDS = 5; // how many words per headline to guess
 	public static final int R3_POINTS = 10; // how many points per headline
 	// ROUND 4
@@ -36,7 +37,6 @@ public class Quiz_AlternativeB {
 	public boolean[] exaequo_first = new boolean[4];
 	
 	private Random random_generator = new Random();
-
 	public Quiz_AlternativeB(Player p0, Player p1, Player p2, Player p3){
 		this.p0 = p0;
 		this.p1 = p1;
@@ -113,18 +113,15 @@ public class Quiz_AlternativeB {
 	 * Each team can win 10 points by guessing paper headlines - if they don't get anything, other team gets a try
 	 */
 	private void playRoundThree(){
-		// T1 guessround
-		int guess = random_generator.nextInt(R3_N_WORDS);
-		t1.addPoints(guess*R3_POINTS);
-		// T0 guessround
-		guess = random_generator.nextInt(R3_N_WORDS);
-		t0.addPoints(guess*R3_POINTS);
-		// T1 guessround
-		guess = random_generator.nextInt(R3_N_WORDS);
-		t1.addPoints(guess*R3_POINTS);
-		// T0 guessround
-		guess = random_generator.nextInt(R3_N_WORDS);
-		t0.addPoints(guess*R3_POINTS);
+		
+		for(int i = 0; i < R3_N_PER_TEAM; i++){
+			// T1 guessround
+			int guess = random_generator.nextInt(R3_N_WORDS);
+			t1.addPoints(guess*R3_POINTS);
+			// T0 guessround
+			guess = random_generator.nextInt(R3_N_WORDS);
+			t0.addPoints(guess*R3_POINTS);		
+		}
 	}
 
 	/**
