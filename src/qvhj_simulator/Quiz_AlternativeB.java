@@ -10,18 +10,18 @@ public class Quiz_AlternativeB {
 	
 	// CONFIGURE ROUNDS AND MODEL ASSUMPTIONS HERE
 	// Round 1
-	public static final int R1_POINTS_START = 50; // start points for every player
 	public static final int R1_POINTS = 20; // reward for getting question right
-	public static final int R1_POINTS_FAULT = 10; // penalty for getting question wrong
+	public static final int R1_POINTS_FAULT = 0; //
 	// Round 2
 	public static final int R2_N_PER_TEAM = 2; // how many picture questions per team
 	public static final int R2_POINTS_FIRST = 20; // reward for getting first question right
 	public static final int R2_POINTS_SECOND = 40; // reward for getting second question right
 	// Round 3
-	public static final int R3_N_PER_TEAM = 2; // how many headlines per team
-	public static final int R3_N_WORDS = 5; // how many words per headline to guess
+	public static final int R3_N_PER_TEAM = 8; // how many headlines per team
+	public static final int R3_N_WORDS = 1; // how many words per headline to guess
 	public static final int R3_POINTS = 10; // how many points per headline
 	// ROUND 4
+	public static final int R4_BAGGABLE = 8;
 	public static final int R4_ASSUME_BAGGED = 3; // how many items do we assume players definitely will get
 	public static final int R4_POINTS_STEP = 20; // steps for points in round 4
 	
@@ -48,17 +48,17 @@ public class Quiz_AlternativeB {
 	 * Play a full quiz
 	 */
 	public void play(){
+		
+		pubVote();
 		playRoundOne();
 		exaequo_first[0] = checkForExAequoFirst();
 		exaequo_last[0] = checkForExAequoLast();
 		generateTeams();
 		
-		
 		playRoundTwo();
 		exaequo_first[1] = checkForExAequoFirst();
 		exaequo_last[1] = checkForExAequoLast();
 		generateTeams();
-		
 		
 		playRoundThree();
 		exaequo_first[2] = checkForExAequoFirst();
@@ -69,29 +69,40 @@ public class Quiz_AlternativeB {
 		exaequo_first[3] = checkForExAequoFirst();
 		exaequo_last[3] = checkForExAequoLast();
 	}
+	
+	private void pubVote(){
+		ArrayList<Integer> eurootjes = new ArrayList<Integer>();
+		eurootjes.add(1);
+		eurootjes.add(2);
+		eurootjes.add(3);
+		eurootjes.add(4);
+		Collections.shuffle(eurootjes);
+		p0.addPoints(eurootjes.get(0));
+		p1.addPoints(eurootjes.get(1));
+		p2.addPoints(eurootjes.get(2));
+		p3.addPoints(eurootjes.get(3));
+	}
 
 	/**
 	 * ROUND 1
 	 * No teams are formed. Every player gets introduced, and the other players get a question about each player.
 	 */
 	private void playRoundOne(){
-		// SET ALL PLAYERS POINTS TO R1_POINTS_START
-		this.p0.points = R1_POINTS_START;
-		this.p1.points = R1_POINTS_START;
-		this.p2.points = R1_POINTS_START;
-		this.p3.points = R1_POINTS_START;
 		// questions about p0
 		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p2.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		
 		// questions about p1
 		this.p2.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		
 		// questions about p2
 		this.p3.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
+		
 		// questions about p3
 		this.p0.playQuestion(R1_POINTS,R1_POINTS_FAULT);
 		this.p1.playQuestion(R1_POINTS,R1_POINTS_FAULT);
@@ -116,10 +127,10 @@ public class Quiz_AlternativeB {
 		
 		for(int i = 0; i < R3_N_PER_TEAM; i++){
 			// T1 guessround
-			int guess = random_generator.nextInt(R3_N_WORDS);
+			int guess = random_generator.nextInt(R3_N_WORDS+1);
 			t1.addPoints(guess*R3_POINTS);
 			// T0 guessround
-			guess = random_generator.nextInt(R3_N_WORDS);
+			guess = random_generator.nextInt(R3_N_WORDS+1);
 			t0.addPoints(guess*R3_POINTS);		
 		}
 	}
@@ -135,8 +146,11 @@ public class Quiz_AlternativeB {
 	 */
 	private void playRoundFour(){
 		// How many topics bagged?
-		int t0_bag = 3 + random_generator.nextInt(3);
-		int t1_bag = 3 + random_generator.nextInt(3);
+		int t0_bag = R4_ASSUME_BAGGED;
+		int t1_bag = R4_ASSUME_BAGGED;
+		
+		int to_verdeel = R4_BAGGABLE - (2*R4_ASSUME_BAGGED);
+		
 
 		// play five question rounds for incrementing point value
 		for(int i = 1; i<=5; i++){		
