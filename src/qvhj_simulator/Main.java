@@ -3,9 +3,16 @@ package qvhj_simulator;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Main class to run some quizzes and collect results
+ * 
+ * @author JEROEN BAERT
+ *
+ */
 public class Main {
 
-	public static final int HOW_MANY_SIMS = 100000;
+	public static final int HOW_MANY_SIMS = 100000; // how many simulations do you want to run?
+	
 	public static void main(String[] args) {
 
 		// statistics
@@ -19,26 +26,26 @@ public class Main {
 
 		for(int i = 0; i<HOW_MANY_SIMS; i++){
 			
-			// create players
-			Player a = new Player("TomWaes");
-			Player b = new Player("Daniel");
-			Player c = new Player("Phara");
-			Player d = new Player("Linde");
-			
-			// Play quiz
+			// CREATE PLAYERS AND QUIZ
+			Player a = new Player("Jeroen");
+			Player b = new Player("Katrijn");
+			Player c = new Player("Elke");
+			Player d = new Player("Vincent");
 			Quiz_AlternativeB q = new Quiz_AlternativeB(a, b, c, d);
-			//Quiz_AlternativeA q = new Quiz_AlternativeA(a, b, c, d);
-			//Quiz_Basic q = new Quiz_Basic(a, b, c, d);
+			
+			// PlAY QUIZ
 			q.play();
-			//q.printCSV();
 
-			// collect quiz results
+			// COLLECT QUIZ RESULTS
+			// Get winning players
 			ArrayList<Player> sorted_players = q.getSortedPlayers();
 			winning_players.add(sorted_players);
+			// Get final points
 			scores_0.add(sorted_players.get(0).points);
 			scores_1.add(sorted_players.get(1).points);
 			scores_2.add(sorted_players.get(2).points);
 			scores_3.add(sorted_players.get(3).points);
+			// Check for ex aequos after each round
 			if(q.exaequo_last[0]){exaequos_last[0]++;}
 			if(q.exaequo_first[0]){exaequos_first[0]++;}
 			if(q.exaequo_last[1]){exaequos_last[1]++;}
@@ -49,7 +56,7 @@ public class Main {
 			if(q.exaequo_first[3]){exaequos_first[3]++;}
 		}
 		
-		// CALCULATE TEST SET STATISTICS
+		// CALCULATE TEST SET STATISTICS (over HOW_MANY_SIMS)
 		double avg_0 = Statistics.average(scores_0);
 		double avg_1 = Statistics.average(scores_1);
 		double avg_2 = Statistics.average(scores_2);

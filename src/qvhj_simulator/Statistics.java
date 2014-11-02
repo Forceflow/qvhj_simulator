@@ -2,6 +2,10 @@ package qvhj_simulator;
 
 import java.util.ArrayList;
 
+/**
+ * Various statistics helper functions
+ * @author Jeroen Baert
+ */
 public class Statistics {
 	public static double average(ArrayList<Integer> array){
 		int sum = 0;
