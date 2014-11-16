@@ -39,6 +39,10 @@ public class Team {
 		p1.addPoints(points);
 	}
 	
+	public boolean containsPlayer(Player p){
+		return (p0 == p | p1 == p);
+	}
+	
 	/**
 	 * Team smartness = smartness of brightest player
 	 * @return The smartness value, between 0 and 100
