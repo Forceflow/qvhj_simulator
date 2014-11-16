@@ -2,6 +2,7 @@ package qvhj_simulator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -12,6 +13,8 @@ public class Quiz_Final {
 	
 	// CONFIGURE ROUNDS AND MODEL ASSUMPTIONS HERE
 	
+	// TEAM FORMING
+	public static final boolean NEED_UNIQUE_TEAMS = true;
 	// INTRO ROUND
 	public static final int R_INTRO_POINTS = 25; // reward for getting question right in intro round
 	public static final int R_INTRO_POINTS_FAULT = 0; // punishment for getting question wrong in intro round
@@ -20,9 +23,9 @@ public class Quiz_Final {
 	public static final int R_PICS_POINTS1 = 20; // reward for getting first question right in picture round
 	public static final int R_PICS_POINTS2 = 40; // reward for getting second question right in picture round
 	// HEADLINES ROUND
-	public static final int R_HEADLINES_PER_TEAM = 8; // how many headlines per team in headlines round
+	public static final int R_HEADLINES_PER_TEAM = 6; // how many headlines per team in headlines round
 	public static final int R_HEADLINES_WORDS = 1; // how many words per headline to guess in headlines round
-	public static final int R_HEADLINES_POINTS = 10; // how many points per headline in headlines round
+	public static final int R_HEADLINES_POINTS = 20; // how many points per headline in headlines round
 	// ROUND 4
 	public static final int R_CLIPS_BAGGABLE = 8; // how many questions you can "bag" in film clips round
 	public static final int R_CLIPS_ASSUME_BAGGED = 3; // how many questions do we assume teams will definitely get in film clips round
@@ -37,6 +40,8 @@ public class Quiz_Final {
 	// Teams (these change during the quiz)
 	private Team t0;
 	private Team t1;
+	
+	private ArrayList<Team> team_history = new ArrayList<Team>();
 	
 	// Recording the amount of ex aequos
 	public boolean[] exaequo_last = new boolean[4];
@@ -57,47 +62,30 @@ public class Quiz_Final {
 	 * Play a full quiz
 	 */
 	public void play(){
-		pubVote();
-		
 		playIntroRound();
 		exaequo_first[0] = checkForExAequoFirst();
 		exaequo_last[0] = checkForExAequoLast();
-		generateTeams();
-		
-		playPictureRound();
-		exaequo_first[1] = checkForExAequoFirst();
-		exaequo_last[1] = checkForExAequoLast();
-		generateTeams();
+		generateTeams(NEED_UNIQUE_TEAMS);
+		team_history.add(t0);
+		team_history.add(t1);
 		
 		playHeadlinesRound();
+		exaequo_first[1] = checkForExAequoFirst();
+		exaequo_last[1] = checkForExAequoLast();
+		generateTeams(NEED_UNIQUE_TEAMS);
+		team_history.add(t0);
+		team_history.add(t1);
+		
+		playPictureRound();
 		exaequo_first[2] = checkForExAequoFirst();
 		exaequo_last[2] = checkForExAequoLast();
-		generateTeams();
+		generateTeams(NEED_UNIQUE_TEAMS);
+		team_history.add(t0);
+		team_history.add(t1);
 		
 		playClipsRound();
 		exaequo_first[3] = checkForExAequoFirst();
 		exaequo_last[3] = checkForExAequoLast();
-	}
-	
-	/**
-	 * ROUND 0
-	 * The pubvote round distributes 1,2,3 or 4 points randomly over the players.
-	 * This is actually disguised score jittering at the start which prevents ex aequos.
-	 * 
-	 * As long as all subsequent points are multiples of 5, it is mathematically guaranteed
-	 * that no one can reach the same score.
-	 */
-	private void pubVote(){
-		ArrayList<Integer> eurootjes = new ArrayList<Integer>();
-		eurootjes.add(1);
-		eurootjes.add(2);
-		eurootjes.add(3);
-		eurootjes.add(4);
-		Collections.shuffle(eurootjes);
-		p0.addPoints(eurootjes.get(0));
-		p1.addPoints(eurootjes.get(1));
-		p2.addPoints(eurootjes.get(2));
-		p3.addPoints(eurootjes.get(3));
 	}
 
 	/**
@@ -130,28 +118,27 @@ public class Quiz_Final {
 
 	/**
 	 * PICTURE ROUND
+	 * Each team picks a picture and answers two questions about it. In case of wrong answer, other team gets a try.
 	 */
 	private void playPictureRound(){
 		for(int i = 0; i<R_PICS_PER_TEAM; i++){
-			// t1 plays a question set
-			if(! t1.playQuestion(R_PICS_POINTS1)){ // if they fail
-				t0.playQuestion(R_PICS_POINTS1); // other team gets a try
-			}
-			if(! t1.playQuestion(R_PICS_POINTS2)){
-				t0.playQuestion(R_PICS_POINTS2);
-			}
-			// t0 plays a question set
-			if(! t0.playQuestion(R_PICS_POINTS1)){ // if they fail
-				t1.playQuestion(R_PICS_POINTS1); // other team gets a try
-			}
-			if(! t0.playQuestion(R_PICS_POINTS2)){
-				t1.playQuestion(R_PICS_POINTS2);
-			}
+			playPicture(t1,t0); // t1 plays a question set
+			playPicture(t0, t1); // t0 plays a question set
+		}
+	}
+	
+	private void playPicture(Team A, Team B){
+		// t0 plays a question set
+		if(! A.playQuestion(R_PICS_POINTS1)){ // if they fail
+			B.playQuestion(R_PICS_POINTS1); // other team gets a try
+		}
+		if(! A.playQuestion(R_PICS_POINTS2)){
+			B.playQuestion(R_PICS_POINTS2);
 		}
 	}
 
 	/** 
-	 * ROUND 3
+	 * HEADLINES ROUND
 	 * Each team can win  points by guessing a word in a paper headline.
 	 * Every team gets in film clips round headlines to guess a word in. In case of failure, it doesn't
 	 * go to the other team. Quick-fire round.
@@ -169,7 +156,7 @@ public class Quiz_Final {
 		int wordsleft = R_HEADLINES_WORDS - guess;
 		if(wordsleft > 0){ // if there are still words left to guess, team B gets a try
 			int guess_other = random_generator.nextInt(wordsleft+1);
-			B.addPoints(guess_other);
+			B.addPoints(guess_other*R_HEADLINES_POINTS);
 		}
 	}
 
@@ -219,9 +206,9 @@ public class Quiz_Final {
 	}
 	
 	/**
-	 * Generate teams - t1 will always contain the team with the player with the lowest score
+	 * Shuffle teams - t1 will always contain the team with the player with the lowest score
 	 */
-	private void generateTeams(){
+	private void shuffleTeams(){
 		// get list of players sorted by score
 		ArrayList<Player> sorted_players = this.getSortedPlayers();
 		Player lastplayer = sorted_players.get(3); // get player in last place
@@ -245,43 +232,35 @@ public class Quiz_Final {
 	}
 	
 	/**
-	 * Generate teams - t1 will always contain the team with the player with the lowest score
+	 * Generate teams
+	 * @param unique : If you need teams that haven't been formed before
 	 */
-	private void generateTeamsNotFirstRound(){
-		// get list of players sorted by score
-		ArrayList<Player> sorted_players = this.getSortedPlayers();
-		Player lastplayer = sorted_players.get(3); // get player in last place
-
-		Player forbidden = t0.p1; // player which last player cannot teamup with
-		Team otherteam = t1; // the other team
-		
-		// In which team is last player?
-		// He's in T0
-		if(t0.p0 == lastplayer){
-			forbidden = t0.p1;
-			otherteam = t1;
-		} else if (t0.p1 == lastplayer){
-			forbidden = t0.p0;
-			otherteam = t1;
-		// He's in T1
-		} else if (t1.p0 == lastplayer){
-			forbidden = t1.p1;
-			otherteam = t0;
-		} else if (t1.p1 == lastplayer){
-			forbidden = t1.p0;
-			otherteam = t0;
+	private void generateTeams(boolean unique){
+		// in case teams don't have to be unique
+		if(! unique){
+			shuffleTeams();
+			return;
+		}
+		// we need unique teams
+		boolean uniquefound = false;
+		while(!uniquefound){
+			shuffleTeams();
+			// assume we found a unique one
+			uniquefound = true;
+			// check if t0 was already used
+			Iterator<Team> it = team_history.iterator();
+			while(it.hasNext()){
+				Team history = it.next();
+				if (history.containsPlayer(t0.p0) && history.containsPlayer(t0.p1)){
+					uniquefound = false;
+					break;
+				}
+			}
 		}
 		
-		int partner = random_generator.nextInt(2);
-		if(partner == 0){
-			t1 = new Team(lastplayer, otherteam.p0);
-			t0 = new Team(forbidden, otherteam.p1);
-		}
-		if(partner == 1){
-			t1 = new Team(lastplayer, otherteam.p1);
-			t0 = new Team(forbidden, otherteam.p0);
-		}
 	}
+	
+	
 	
 	/**
 	 * Check for an ex aequo for first place

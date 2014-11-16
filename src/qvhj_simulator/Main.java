@@ -31,7 +31,7 @@ public class Main {
 			Player b = new Player("Katrijn");
 			Player c = new Player("Elke");
 			Player d = new Player("Vincent");
-			Quiz_AlternativeB q = new Quiz_AlternativeB(a, b, c, d);
+			Quiz_Final q = new Quiz_Final(a, b, c, d);
 			
 			// PlAY QUIZ
 			q.play();
