@@ -11,7 +11,7 @@ import java.util.Collections;
  */
 public class Main {
 
-	public static final int HOW_MANY_SIMS = 100000; // how many simulations do you want to run?
+	public static final int HOW_MANY_SIMS = 100; // how many simulations do you want to run?
 	
 	public static void main(String[] args) {
 
@@ -35,6 +35,7 @@ public class Main {
 			
 			// PlAY QUIZ
 			q.play();
+			q.printCSV();
 
 			// COLLECT QUIZ RESULTS
 			// Get winning players
